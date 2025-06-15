@@ -94,8 +94,8 @@ const ChatbotModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md p-0 overflow-hidden">
-        <DialogHeader className="bg-gradient-to-b from-primary to-background px-6 py-4">
+      <DialogContent className="sm:max-w-md p-0 overflow-hidden bg-white/30 backdrop-blur-md border border-white/30 shadow-xl">
+        <DialogHeader className="bg-gradient-to-b from-primary/70 to-background/40 px-6 py-4">
           <DialogTitle className="flex justify-between items-center">
             Gemini WeatherBot
             <Button variant="ghost" size="sm" onClick={() => setShowKeyInput((s) => !s)}>
@@ -107,7 +107,7 @@ const ChatbotModal = ({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="h-[350px] md:h-[400px] overflow-y-auto px-4 pt-4 bg-background">
+        <div className="h-[350px] md:h-[400px] overflow-y-auto px-4 pt-4 bg-transparent">
           {messages.map((msg, idx) => (
             <ChatMessage key={idx} msg={msg} />
           ))}
@@ -121,7 +121,7 @@ const ChatbotModal = ({
         </div>
 
         {showKeyInput && (
-          <div className="p-4 bg-muted flex flex-col gap-2">
+          <div className="p-4 bg-white/40 backdrop-blur rounded-lg flex flex-col gap-2">
             <label className="text-xs font-medium opacity-70">
               Gemini API Key (get from Google AI Studio)
             </label>
@@ -135,7 +135,7 @@ const ChatbotModal = ({
           </div>
         )}
 
-        <form className="flex items-center gap-2 border-t p-4 bg-background" onSubmit={handleSend}>
+        <form className="flex items-center gap-2 border-t p-4 bg-white/20 backdrop-blur" onSubmit={handleSend}>
           <Input
             type="text"
             className="flex-1"

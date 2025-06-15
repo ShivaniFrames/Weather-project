@@ -12,7 +12,7 @@ type WeatherInfo = {
 
 const WeatherCard = ({ weather }: { weather: WeatherInfo | null }) => {
   if (!weather) return (
-    <Card className="animate-pulse w-full max-w-xs mx-auto mt-8">
+    <Card className="animate-pulse w-full max-w-xs mx-auto mt-8 bg-white/20 backdrop-blur-md border border-white/30 shadow-lg">
       <CardHeader>
         <CardTitle>Loading...</CardTitle>
       </CardHeader>
@@ -24,7 +24,7 @@ const WeatherCard = ({ weather }: { weather: WeatherInfo | null }) => {
   );
 
   return (
-    <Card className="w-full max-w-xs mx-auto shadow-lg animate-fade-in">
+    <Card className="w-full max-w-xs mx-auto shadow-lg animate-fade-in bg-white/20 backdrop-blur-md border border-white/30">
       <CardHeader className="flex flex-col items-center">
         <span className="text-6xl">{getWeatherEmoji(weather.weatherMain)}</span>
         <CardTitle className="mt-2 text-2xl">{weather.city}</CardTitle>
