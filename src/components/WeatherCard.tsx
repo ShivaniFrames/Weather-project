@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { getWeatherEmoji } from "@/lib/weatherEmoji";
@@ -91,7 +90,8 @@ function getCardBg(weatherMain: string): string {
     case "rain":
     case "drizzle":
     case "thunderstorm":
-      return "bg-gradient-to-br from-sky-800/90 to-sky-600/70"; // blue
+      // Lighter blue gradient
+      return "bg-gradient-to-br from-blue-300/80 via-blue-200/60 to-blue-100/60";
     case "clear":
       return "bg-gradient-to-br from-yellow-300/90 via-yellow-200/70 to-yellow-100/80"; // yellow
     case "clouds":
@@ -101,7 +101,7 @@ function getCardBg(weatherMain: string): string {
     case "spring":
       return "bg-gradient-to-br from-orange-300/80 via-orange-200/70 to-yellow-100/80"; // orange/yellow
     default:
-      return "bg-gradient-to-br from-sky-800/90 to-sky-600/70"; // fallback blue
+      return "bg-gradient-to-br from-blue-300/80 via-blue-200/60 to-blue-100/60"; // fallback to lighter blue
   }
 }
 
