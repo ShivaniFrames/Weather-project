@@ -1,3 +1,4 @@
+
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Dialog,
@@ -106,58 +107,70 @@ const ChatbotModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md p-0 overflow-hidden bg-white/30 backdrop-blur-md border border-white/30 shadow-xl">
-        <DialogHeader className="bg-gradient-to-b from-primary/70 to-background/40 px-6 py-4">
-          <DialogTitle className="flex justify-between items-center">
-            Gemini WeatherBot
-            <Button variant="ghost" size="sm" onClick={() => setShowKeyInput((s) => !s)}>
-              {showKeyInput ? "Hide API Key" : "Set API Key"}
+      <DialogContent className="sm:max-w-sm w-[90vw] max-h-[70vh] p-0 overflow-hidden bg-gradient-to-br from-blue-50 to-white border border-blue-200 shadow-2xl">
+        <DialogHeader className="bg-gradient-to-r from-blue-600 to-blue-700 px-4 py-3">
+          <DialogTitle className="flex justify-between items-center text-white text-sm">
+            🤖 WeatherBot
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => setShowKeyInput((s) => !s)}
+              className="text-white hover:bg-blue-500 text-xs h-6 px-2"
+            >
+              {showKeyInput ? "Hide Key" : "API Key"}
             </Button>
           </DialogTitle>
-          <DialogDescription className="opacity-70">
-            Chat with your AI weather buddy! 🌦️
+          <DialogDescription className="text-blue-100 text-xs">
+            Your AI weather companion! 🌦️
           </DialogDescription>
         </DialogHeader>
 
-        <div className="h-[350px] md:h-[400px] overflow-y-auto px-4 pt-4 bg-transparent">
+        <div className="h-[250px] overflow-y-auto px-3 pt-3 bg-gradient-to-b from-blue-50/50 to-white/50">
           {messages.map((msg, idx) => (
             <ChatMessage key={idx} msg={msg} />
           ))}
           {aiTyping && (
             <div className="flex items-center space-x-2 my-2">
-              <Loader2 className="animate-spin w-5 h-5 text-accent-foreground" />
-              <span className="text-accent-foreground">AI is typing...</span>
+              <Loader2 className="animate-spin w-4 h-4 text-blue-600" />
+              <span className="text-blue-600 text-sm">AI is typing...</span>
             </div>
           )}
           <div ref={bottomRef} />
         </div>
 
         {showKeyInput && (
-          <div className="p-4 bg-white/40 backdrop-blur rounded-lg flex flex-col gap-2">
-            <label className="text-xs font-medium opacity-70">
-              Gemini API Key (get from Google AI Studio)
+          <div className="p-3 bg-blue-50/80 backdrop-blur rounded-lg flex flex-col gap-2 mx-3 mb-2">
+            <label className="text-xs font-medium text-blue-700">
+              Gemini API Key
             </label>
             <Input
               type="password"
-              placeholder="Paste Gemini API Key here..."
+              placeholder="Paste API Key..."
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
+              className="text-xs h-8 border-blue-200 focus:border-blue-400"
             />
-            <span className="text-xs text-muted-foreground">Your key is only used locally and is never shared.</span>
+            <span className="text-xs text-blue-600">Stored locally only</span>
           </div>
         )}
 
-        <form className="flex items-center gap-2 border-t p-4 bg-white/20 backdrop-blur" onSubmit={handleSend}>
+        <form className="flex items-center gap-2 border-t border-blue-200 p-3 bg-white/80 backdrop-blur" onSubmit={handleSend}>
           <Input
             type="text"
-            className="flex-1"
-            placeholder="Send a message..."
+            className="flex-1 h-8 text-sm border-blue-200 focus:border-blue-400"
+            placeholder="Type your message..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
             disabled={aiTyping}
             autoFocus
           />
-          <Button type="submit" disabled={aiTyping || !input.trim()}>Send</Button>
+          <Button 
+            type="submit" 
+            disabled={aiTyping || !input.trim()}
+            className="bg-blue-600 hover:bg-blue-700 h-8 px-3 text-xs"
+          >
+            Send
+          </Button>
         </form>
       </DialogContent>
     </Dialog>

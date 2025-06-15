@@ -9,8 +9,11 @@ export type ChatMsg = {
 const ChatMessage = ({ msg }: { msg: ChatMsg }) => (
   <div className={`flex ${msg.from === "user" ? "justify-end" : "justify-start"}`}>
     <div
-      className={`rounded-xl px-4 py-2 max-w-[80%] mb-2 shadow 
-      ${msg.from === "user" ? "bg-primary text-primary-foreground" : "bg-accent text-accent-foreground"}`}
+      className={`rounded-xl px-3 py-2 max-w-[80%] mb-2 shadow-sm text-sm transition-all hover:shadow-md
+      ${msg.from === "user" 
+        ? "bg-blue-600 text-white" 
+        : "bg-white border border-blue-200 text-blue-900 hover:bg-blue-50"
+      }`}
     >
       {msg.text}
     </div>

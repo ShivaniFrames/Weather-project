@@ -12,11 +12,12 @@ const ChatButton = ({ onClick }: ChatButtonProps) => (
     onClick={onClick}
     aria-label="Open chat"
     className={cn(
-      "fixed bottom-6 right-6 z-50 rounded-full bg-primary text-primary-foreground shadow-lg p-4 transition-transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-ring",
-      "md:bottom-8 md:right-8"
+      "fixed bottom-4 right-4 z-50 rounded-full bg-blue-600 text-white shadow-lg p-3 transition-all duration-300 hover:scale-110 hover:bg-blue-700 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-blue-300",
+      "md:bottom-6 md:right-6",
+      "animate-pulse hover:animate-none"
     )}
   >
-    <MessageCircle className="w-7 h-7" />
+    <MessageCircle className="w-5 h-5" />
   </button>
 );
 
