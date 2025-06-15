@@ -13,41 +13,14 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 
+// Use the provided Gemini API key unless overridden by user
+const DEFAULT_GEMINI_KEY = "AIzaSyCgrL1mBSOrjX2NjJIXBHmrAAAZrCAA0Xc";
+const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=";
+
 type ChatbotModalProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   weatherTemp: number | null;
-};
-
-const AI_TYPING_DELAY = 1200;
-
-const GeminiAPI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=GEMINI_API_KEY";
-
-// Call gemini, fallback to dummy if key missing
-const callGeminiAPI = async (
-  apiKey: string,
-  message: string,
-  weatherTemp: number | null
-): Promise<string> => {
-  if (!apiKey || apiKey === "GEMINI_API_KEY") {
-    // Simulate generic AI message
-    return new Promise((resolve) =>
-      setTimeout(() => resolve("I'm a demo AI! 🌞 Please connect a Gemini API key for real responses."), 1200)
-    );
-  }
-  const prompt = `Based on the current temperature ${weatherTemp !== null ? weatherTemp + "°C" : "[unknown]"}, ${message}`;
-  const res = await fetch(GeminiAPI_URL.replace("GEMINI_API_KEY", apiKey), {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      contents: [
-        { parts: [{ text: prompt }] }
-      ]
-    })
-  });
-  const data = await res.json();
-  const aiText = data?.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, I couldn't get a response from Gemini API.";
-  return aiText;
 };
 
 const ChatbotModal = ({
@@ -63,7 +36,7 @@ const ChatbotModal = ({
   ]);
   const [input, setInput] = useState("");
   const [aiTyping, setAITyping] = useState(false);
-  const [apiKey, setApiKey] = useState(""); // User enters API key manually here.
+  const [apiKey, setApiKey] = useState(""); // Let user override API key if they want.
   const [showKeyInput, setShowKeyInput] = useState(false);
 
   const bottomRef = useRef<HTMLDivElement | null>(null);
@@ -79,6 +52,38 @@ const ChatbotModal = ({
     }
   }, [open]);
 
+  // Unified Gemini call function (always shows typing indicator while fetching)
+  const callGeminiAPI = useCallback(
+    async (message: string, temperature: number | null) => {
+      const keyToUse = apiKey || DEFAULT_GEMINI_KEY;
+      try {
+        const prompt = `Based on the current temperature ${temperature !== null ? temperature + "°C" : "[unknown]"}, ${message}`;
+        const response = await fetch(
+          `${GEMINI_API_URL}${keyToUse}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              contents: [
+                { parts: [{ text: prompt }] }
+              ]
+            })
+          }
+        );
+        const data = await response.json();
+        // Defensive fallback
+        return (
+          data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+          "Sorry, I couldn't get a response from Gemini API."
+        );
+      } catch (e) {
+        return "Sorry, there was a problem connecting to Gemini.";
+      }
+    },
+    [apiKey]
+  );
+
+  // Handle send button or form submit
   const handleSend = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (!input.trim() || aiTyping) return;
@@ -87,7 +92,8 @@ const ChatbotModal = ({
     setInput("");
     setAITyping(true);
 
-    const aiReply = await callGeminiAPI(apiKey, userMsg, weatherTemp);
+    // Show typing while awaiting API
+    const aiReply = await callGeminiAPI(userMsg, weatherTemp);
     setMessages((msgs) => [...msgs, { from: "ai", text: aiReply }]);
     setAITyping(false);
   };
@@ -153,3 +159,4 @@ const ChatbotModal = ({
 };
 
 export default ChatbotModal;
+
