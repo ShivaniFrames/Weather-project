@@ -1,3 +1,4 @@
+
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Dialog,
@@ -35,8 +36,6 @@ const ChatbotModal = ({
   ]);
   const [input, setInput] = useState("");
   const [aiTyping, setAITyping] = useState(false);
-  const [apiKey, setApiKey] = useState(""); // Let user override API key if they want.
-  const [showKeyInput, setShowKeyInput] = useState(false);
 
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
@@ -61,11 +60,10 @@ const ChatbotModal = ({
   // Unified Gemini call function (always shows typing indicator while fetching)
   const callGeminiAPI = useCallback(
     async (message: string, temperature: number | null) => {
-      const keyToUse = apiKey || DEFAULT_GEMINI_KEY;
       try {
         const prompt = `Based on the current temperature ${temperature !== null ? temperature + "°C" : "[unknown]"}, ${message}`;
         const response = await fetch(
-          `${GEMINI_API_URL}${keyToUse}`,
+          `${GEMINI_API_URL}${DEFAULT_GEMINI_KEY}`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -86,7 +84,7 @@ const ChatbotModal = ({
         return "Sorry, there was a problem connecting to Gemini.";
       }
     },
-    [apiKey]
+    []
   );
 
   // Helper for typing dots animation
@@ -137,16 +135,8 @@ const ChatbotModal = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-xs w-[90vw] max-w-[320px] max-h-[480px] p-0 overflow-hidden bg-white border border-gray-200 shadow-xl rounded-xl">
         <DialogHeader className="bg-white px-4 py-3 border-b border-gray-100">
-          <DialogTitle className="flex justify-between items-center text-gray-800 text-base font-semibold">
+          <DialogTitle className="text-gray-800 text-base font-semibold">
             Chat Assistant
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={() => setShowKeyInput((s) => !s)}
-              className="text-gray-500 hover:bg-gray-100 hover:text-gray-700 text-xs h-7 px-2 transition-all"
-            >
-              {showKeyInput ? "Hide" : "Key"}
-            </Button>
           </DialogTitle>
           <DialogDescription className="text-gray-500 text-xs">
             Your AI weather companion! 🌦️
@@ -160,22 +150,6 @@ const ChatbotModal = ({
           {aiTyping && <TypingIndicator />}
           <div ref={bottomRef} />
         </div>
-
-        {showKeyInput && (
-          <div className="p-3 bg-gray-50 border-t border-gray-100 space-y-2">
-            <label className="text-xs font-medium text-gray-600">
-              Gemini API Key
-            </label>
-            <Input
-              type="password"
-              placeholder="Paste API Key..."
-              value={apiKey}
-              onChange={(e) => setApiKey(e.target.value)}
-              className="text-xs h-7 bg-white border-gray-300 text-gray-800 placeholder-gray-400 focus:border-blue-500"
-            />
-            <span className="text-xs text-gray-500">Stored locally only</span>
-          </div>
-        )}
 
         <form className="flex items-center gap-2 border-t border-gray-100 p-3 bg-white" onSubmit={handleSend}>
           <Input
