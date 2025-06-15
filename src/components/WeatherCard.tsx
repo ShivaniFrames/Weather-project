@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { getWeatherEmoji } from "@/lib/weatherEmoji";
@@ -77,8 +78,30 @@ function getWeatherAdvice(weatherMain: string): string {
     case "mist":
     case "fog":
       return "It's foggy—drive carefully and stay safe!";
+    case "spring":
+      return "It's springtime—enjoy the blossoms!";
     default:
       return "Have a great day, whatever the weather!";
+  }
+}
+
+// Helper to get card color classes based on weather
+function getCardBg(weatherMain: string): string {
+  switch (weatherMain.toLowerCase()) {
+    case "rain":
+    case "drizzle":
+    case "thunderstorm":
+      return "bg-gradient-to-br from-sky-800/90 to-sky-600/70"; // blue
+    case "clear":
+      return "bg-gradient-to-br from-yellow-300/90 via-yellow-200/70 to-yellow-100/80"; // yellow
+    case "clouds":
+      return "bg-gradient-to-br from-slate-600/90 to-slate-800/80"; // grayish
+    case "snow":
+      return "bg-gradient-to-br from-blue-200/80 to-blue-100/80"; // cool white-blue
+    case "spring":
+      return "bg-gradient-to-br from-orange-300/80 via-orange-200/70 to-yellow-100/80"; // orange/yellow
+    default:
+      return "bg-gradient-to-br from-sky-800/90 to-sky-600/70"; // fallback blue
   }
 }
 
@@ -100,11 +123,12 @@ const WeatherCard = ({ weather }: { weather: WeatherInfo | null }) => {
 
   const showCartoonCloud = weather.weatherMain?.toLowerCase() === "clouds";
   const advice = getWeatherAdvice(weather.weatherMain);
+  const cardBg = getCardBg(weather.weatherMain);
 
   return (
     <>
       <BackgroundBubbles />
-      <Card className="w-full max-w-sm mx-auto shadow-2xl shadow-sky-500/20 animate-fade-in bg-gradient-to-br from-blue-900/80 to-blue-700/60 backdrop-blur-[7px] border border-white/10 relative overflow-hidden font-poppins">
+      <Card className={`w-full max-w-sm mx-auto shadow-2xl shadow-sky-500/20 animate-fade-in ${cardBg} backdrop-blur-[7px] border border-white/10 relative overflow-hidden font-poppins`}>
         <Bubbles />
         <CardHeader className="flex flex-col items-center pb-4">
           <span className="mt-2">
@@ -124,8 +148,8 @@ const WeatherCard = ({ weather }: { weather: WeatherInfo | null }) => {
           {/* Weather Details Grid */}
           <div className="grid grid-cols-2 gap-4 w-full text-white/90">
             {weather.feelsLike != null && (
-              <div className="flex items-center space-x-2 bg-white/10 rounded-lg p-2">
-                <Thermometer className="w-4 h-4" />
+              <div className="flex items-center space-x-2 bg-white/10 rounded-lg py-3 px-4"> {/* more padding */}
+                <span className="p-2 rounded-full bg-blue-300/30"><Thermometer className="w-5 h-5" /></span>
                 <div className="text-xs">
                   <div className="opacity-70">Feels like</div>
                   <div className="font-semibold">{Math.round(weather.feelsLike)}°C</div>
@@ -134,8 +158,8 @@ const WeatherCard = ({ weather }: { weather: WeatherInfo | null }) => {
             )}
 
             {weather.humidity != null && (
-              <div className="flex items-center space-x-2 bg-white/10 rounded-lg p-2">
-                <Droplets className="w-4 h-4" />
+              <div className="flex items-center space-x-2 bg-white/10 rounded-lg py-3 px-4">
+                <span className="p-2 rounded-full bg-blue-200/30"><Droplets className="w-5 h-5" /></span>
                 <div className="text-xs">
                   <div className="opacity-70">Humidity</div>
                   <div className="font-semibold">{weather.humidity}%</div>
@@ -144,8 +168,8 @@ const WeatherCard = ({ weather }: { weather: WeatherInfo | null }) => {
             )}
 
             {weather.windSpeed != null && (
-              <div className="flex items-center space-x-2 bg-white/10 rounded-lg p-2">
-                <Wind className="w-4 h-4" />
+              <div className="flex items-center space-x-2 bg-white/10 rounded-lg py-3 px-4">
+                <span className="p-2 rounded-full bg-blue-400/30"><Wind className="w-5 h-5" /></span>
                 <div className="text-xs">
                   <div className="opacity-70">Wind</div>
                   <div className="font-semibold">{weather.windSpeed} m/s</div>
@@ -154,8 +178,8 @@ const WeatherCard = ({ weather }: { weather: WeatherInfo | null }) => {
             )}
 
             {weather.visibility != null && (
-              <div className="flex items-center space-x-2 bg-white/10 rounded-lg p-2">
-                <Eye className="w-4 h-4" />
+              <div className="flex items-center space-x-2 bg-white/10 rounded-lg py-3 px-4">
+                <span className="p-2 rounded-full bg-blue-200/20"><Eye className="w-5 h-5" /></span>
                 <div className="text-xs">
                   <div className="opacity-70">Visibility</div>
                   <div className="font-semibold">{Math.round(weather.visibility / 1000)} km</div>
@@ -164,7 +188,7 @@ const WeatherCard = ({ weather }: { weather: WeatherInfo | null }) => {
             )}
           </div>
           {/* Weather advice */}
-          <div className="mt-4 mb-2 text-center text-base text-blue-200 bg-white/5 rounded-lg px-4 py-2 font-medium shadow">
+          <div className="mt-8 mb-3 text-center text-base text-blue-200 bg-white/5 rounded-lg px-4 py-2 font-medium shadow">
             {advice}
           </div>
         </CardContent>

@@ -72,7 +72,8 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-transparent flex flex-col justify-center items-center px-2 md:px-0 relative font-poppins">
       {/* Removed ThemeToggle */}
-      <div className="w-full max-w-xs md:max-w-md flex flex-col gap-6 mt-14 md:mt-32 animate-fade-in">
+      <div className="w-full max-w-xs md:max-w-md flex flex-col gap-6 mt-14 md:mt-32 animate-fade-in mb-16">
+        {/* Added mb-16 for more space above footer */}
         <WeatherCard weather={weather} />
         {error && <p className="text-center text-sm text-destructive mt-2">{error}</p>}
       </div>
@@ -82,7 +83,7 @@ const Index = () => {
         onOpenChange={setChatOpen}
         weatherTemp={weather ? weather.temp : null}
       />
-      <footer className="absolute bottom-2 left-0 w-full text-center text-xs text-muted-foreground opacity-80">
+      <footer className="absolute bottom-2 left-0 w-full text-center text-xs text-muted-foreground opacity-80 mt-16">
         Powered by OpenWeather, Gemini &nbsp;|&nbsp; Responsive · {new Date().getFullYear()}
       </footer>
     </div>
