@@ -107,40 +107,40 @@ const ChatbotModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-sm w-[90vw] max-h-[70vh] p-0 overflow-hidden bg-gradient-to-br from-blue-50 to-white border border-blue-200 shadow-2xl">
-        <DialogHeader className="bg-gradient-to-r from-blue-600 to-blue-700 px-4 py-3">
+      <DialogContent className="sm:max-w-sm w-[90vw] max-h-[70vh] p-0 overflow-hidden bg-gray-900/95 backdrop-blur-xl border border-gray-700/50 shadow-2xl shadow-blue-500/10">
+        <DialogHeader className="bg-gradient-to-r from-gray-800/90 to-gray-900/90 backdrop-blur-sm px-4 py-3 border-b border-gray-700/50">
           <DialogTitle className="flex justify-between items-center text-white text-sm">
             🤖 WeatherBot
             <Button 
               variant="ghost" 
               size="sm" 
               onClick={() => setShowKeyInput((s) => !s)}
-              className="text-white hover:bg-blue-500 text-xs h-6 px-2"
+              className="text-gray-300 hover:bg-gray-700/50 hover:text-white text-xs h-6 px-2 transition-all"
             >
               {showKeyInput ? "Hide Key" : "API Key"}
             </Button>
           </DialogTitle>
-          <DialogDescription className="text-blue-100 text-xs">
+          <DialogDescription className="text-gray-400 text-xs">
             Your AI weather companion! 🌦️
           </DialogDescription>
         </DialogHeader>
 
-        <div className="h-[250px] overflow-y-auto px-3 pt-3 bg-gradient-to-b from-blue-50/50 to-white/50">
+        <div className="h-[250px] overflow-y-auto px-3 pt-3 bg-gradient-to-b from-gray-900/50 to-gray-800/50 backdrop-blur-sm">
           {messages.map((msg, idx) => (
             <ChatMessage key={idx} msg={msg} />
           ))}
           {aiTyping && (
             <div className="flex items-center space-x-2 my-2">
-              <Loader2 className="animate-spin w-4 h-4 text-blue-600" />
-              <span className="text-blue-600 text-sm">AI is typing...</span>
+              <Loader2 className="animate-spin w-4 h-4 text-blue-400" />
+              <span className="text-blue-400 text-sm">AI is typing...</span>
             </div>
           )}
           <div ref={bottomRef} />
         </div>
 
         {showKeyInput && (
-          <div className="p-3 bg-blue-50/80 backdrop-blur rounded-lg flex flex-col gap-2 mx-3 mb-2">
-            <label className="text-xs font-medium text-blue-700">
+          <div className="p-3 bg-gray-800/60 backdrop-blur-sm rounded-lg flex flex-col gap-2 mx-3 mb-2 border border-gray-700/30">
+            <label className="text-xs font-medium text-gray-300">
               Gemini API Key
             </label>
             <Input
@@ -148,16 +148,16 @@ const ChatbotModal = ({
               placeholder="Paste API Key..."
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
-              className="text-xs h-8 border-blue-200 focus:border-blue-400"
+              className="text-xs h-8 bg-gray-700/50 border-gray-600/50 text-white placeholder-gray-400 focus:border-blue-500/50 backdrop-blur-sm"
             />
-            <span className="text-xs text-blue-600">Stored locally only</span>
+            <span className="text-xs text-gray-400">Stored locally only</span>
           </div>
         )}
 
-        <form className="flex items-center gap-2 border-t border-blue-200 p-3 bg-white/80 backdrop-blur" onSubmit={handleSend}>
+        <form className="flex items-center gap-2 border-t border-gray-700/50 p-3 bg-gray-800/60 backdrop-blur-sm" onSubmit={handleSend}>
           <Input
             type="text"
-            className="flex-1 h-8 text-sm border-blue-200 focus:border-blue-400"
+            className="flex-1 h-8 text-sm bg-gray-700/50 border-gray-600/50 text-white placeholder-gray-400 focus:border-blue-500/50 backdrop-blur-sm"
             placeholder="Type your message..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -167,7 +167,7 @@ const ChatbotModal = ({
           <Button 
             type="submit" 
             disabled={aiTyping || !input.trim()}
-            className="bg-blue-600 hover:bg-blue-700 h-8 px-3 text-xs"
+            className="bg-blue-600 hover:bg-blue-700 h-8 px-3 text-xs transition-all hover:shadow-blue-500/25 backdrop-blur-sm"
           >
             Send
           </Button>
