@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -21,7 +20,6 @@ export default {
 		extend: {
 			fontFamily: {
 				'poppins': ['Poppins', 'sans-serif'],
-				'inter': ['Inter', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
@@ -94,14 +92,6 @@ export default {
           from: { opacity: '0', transform: 'translateY(-10px)' },
           to: { opacity: '1', transform: 'translateY(0)' },
         },
-        "slide-in-up": {
-          from: { opacity: '0', transform: 'translateY(20px) scale(0.95)' },
-          to: { opacity: '1', transform: 'translateY(0) scale(1)' },
-        },
-        "float": {
-          '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-10px)' },
-        },
         bubble: {
           '0%': {
             transform: 'translateY(0) scale(1)',
@@ -120,8 +110,6 @@ export default {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
         "fade-in": "fade-in 0.5s ease-out forwards",
-        "slide-in-up": "slide-in-up 0.3s ease-out forwards",
-        "float": "float 3s ease-in-out infinite",
         bubble: 'bubble 25s linear infinite',
 			}
 		}
