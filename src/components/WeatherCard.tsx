@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { getWeatherEmoji } from "@/lib/weatherEmoji";
@@ -33,10 +34,10 @@ const WeatherCard = ({ weather }: { weather: WeatherInfo | null }) => {
   );
 
   return (
-    <Card className="w-full max-w-xs mx-auto shadow-lg animate-fade-in bg-gradient-to-br from-primary/30 to-secondary/30 backdrop-blur-md border border-white/30 relative overflow-hidden">
+    <Card className="w-full max-w-xs mx-auto shadow-2xl shadow-sky-500/20 dark:shadow-sky-900/40 animate-fade-in bg-gradient-to-br from-sky-400/[.3] to-indigo-500/[.3] backdrop-blur-md border border-white/20 relative overflow-hidden">
       <Bubbles />
       <CardHeader className="flex flex-col items-center">
-        <span className="text-6xl">{getWeatherEmoji(weather.weatherMain)}</span>
+        <span className="text-6xl text-white/90 drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]">{getWeatherEmoji(weather.weatherMain)}</span>
         <CardTitle className="mt-2 text-2xl">{weather.city}</CardTitle>
         <CardDescription className="text-sm text-muted-foreground mb-2 capitalize">{weather.description}</CardDescription>
       </CardHeader>
