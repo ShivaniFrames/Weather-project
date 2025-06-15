@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { getWeatherEmoji } from "@/lib/weatherEmoji";
@@ -9,6 +8,16 @@ type WeatherInfo = {
   description: string;
   weatherMain: string;
 };
+
+const Bubbles = () => (
+  <div className="absolute inset-0 -z-10 overflow-hidden">
+    <div className="absolute w-40 h-40 bg-white/10 rounded-full -bottom-16 -left-16 animate-bubble" style={{ animationDuration: '25s' }}></div>
+    <div className="absolute w-20 h-20 bg-white/10 rounded-full bottom-20 right-10 animate-bubble" style={{ animationDuration: '20s', animationDelay: '3s' }}></div>
+    <div className="absolute w-12 h-12 bg-white/10 rounded-full bottom-5 left-1/2 animate-bubble" style={{ animationDuration: '15s', animationDelay: '1s' }}></div>
+    <div className="absolute w-32 h-32 bg-white/10 rounded-full -bottom-12 right-0 animate-bubble" style={{ animationDuration: '30s', animationDelay: '5s' }}></div>
+    <div className="absolute w-24 h-24 bg-white/10 rounded-full bottom-0 left-10 animate-bubble" style={{ animationDuration: '18s', animationDelay: '7s' }}></div>
+  </div>
+);
 
 const WeatherCard = ({ weather }: { weather: WeatherInfo | null }) => {
   if (!weather) return (
@@ -24,7 +33,8 @@ const WeatherCard = ({ weather }: { weather: WeatherInfo | null }) => {
   );
 
   return (
-    <Card className="w-full max-w-xs mx-auto shadow-lg animate-fade-in bg-white/20 backdrop-blur-md border border-white/30">
+    <Card className="w-full max-w-xs mx-auto shadow-lg animate-fade-in bg-gradient-to-br from-primary/30 to-secondary/30 backdrop-blur-md border border-white/30 relative overflow-hidden">
+      <Bubbles />
       <CardHeader className="flex flex-col items-center">
         <span className="text-6xl">{getWeatherEmoji(weather.weatherMain)}</span>
         <CardTitle className="mt-2 text-2xl">{weather.city}</CardTitle>
