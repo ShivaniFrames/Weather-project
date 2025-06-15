@@ -1,4 +1,3 @@
-
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Dialog,
@@ -47,8 +46,15 @@ const ChatbotModal = ({
 
   useEffect(() => {
     if (!open) {
+      // Reset everything when modal is closed
       setInput("");
       setAITyping(false);
+      setMessages([
+        {
+          from: "ai",
+          text: "Hello! Ask me anything about the weather or just say hi! 😊",
+        },
+      ]);
     }
   }, [open]);
 
@@ -159,4 +165,3 @@ const ChatbotModal = ({
 };
 
 export default ChatbotModal;
-
