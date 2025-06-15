@@ -1,4 +1,3 @@
-
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Dialog,
@@ -90,6 +89,35 @@ const ChatbotModal = ({
     [apiKey]
   );
 
+  // Helper for typing dots animation
+  const TypingIndicator = () => (
+    <div className="flex items-center space-x-2 my-2 select-none">
+      <span className="text-blue-300 font-medium text-xs lowercase">typing</span>
+      <span className="flex items-center space-x-1">
+        <span className="dot bg-blue-300 inline-block w-1.5 h-1.5 rounded-full animate-bounce delay-0" />
+        <span className="dot bg-blue-300 inline-block w-1.5 h-1.5 rounded-full animate-bounce delay-150" />
+        <span className="dot bg-blue-300 inline-block w-1.5 h-1.5 rounded-full animate-bounce delay-300" />
+      </span>
+      <style>
+        {`
+        .dot {
+          animation-name: bounceDot;
+          animation-duration: 1s;
+          animation-iteration-count: infinite;
+        }
+        .dot.delay-0 { animation-delay: 0s; }
+        .dot.delay-150 { animation-delay: 0.15s; }
+        .dot.delay-300 { animation-delay: 0.3s; }
+        @keyframes bounceDot {
+          0%, 100% { transform: translateY(0); opacity: 1; }
+          30% { transform: translateY(-2px); }
+          60% { opacity: 0.6; }
+        }
+        `}
+      </style>
+    </div>
+  );
+
   // Handle send button or form submit
   const handleSend = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -107,8 +135,8 @@ const ChatbotModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-sm w-[90vw] max-h-[70vh] p-0 overflow-hidden bg-gray-900/95 backdrop-blur-xl border border-gray-700/50 shadow-2xl shadow-blue-500/10">
-        <DialogHeader className="bg-gradient-to-r from-gray-800/90 to-gray-900/90 backdrop-blur-sm px-4 py-3 border-b border-gray-700/50">
+      <DialogContent className="sm:max-w-sm w-[90vw] max-h-[70vh] p-0 overflow-hidden bg-blue-900/80 backdrop-blur-xl border border-blue-400/30 shadow-2xl">
+        <DialogHeader className="bg-gradient-to-r from-blue-800/90 to-blue-900/90 backdrop-blur-sm px-4 py-3 border-b border-blue-400/30">
           <DialogTitle className="flex justify-between items-center text-white text-sm">
             🤖 WeatherBot
             <Button 
@@ -125,16 +153,11 @@ const ChatbotModal = ({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="h-[250px] overflow-y-auto px-3 pt-3 bg-gradient-to-b from-gray-900/50 to-gray-800/50 backdrop-blur-sm">
+        <div className="h-[250px] overflow-y-auto px-3 pt-3 bg-gradient-to-b from-blue-950/60 to-blue-900/50 backdrop-blur-sm">
           {messages.map((msg, idx) => (
             <ChatMessage key={idx} msg={msg} />
           ))}
-          {aiTyping && (
-            <div className="flex items-center space-x-2 my-2">
-              <Loader2 className="animate-spin w-4 h-4 text-blue-400" />
-              <span className="text-blue-400 text-sm">AI is typing...</span>
-            </div>
-          )}
+          {aiTyping && <TypingIndicator />}
           <div ref={bottomRef} />
         </div>
 
@@ -154,7 +177,7 @@ const ChatbotModal = ({
           </div>
         )}
 
-        <form className="flex items-center gap-2 border-t border-gray-700/50 p-3 bg-gray-800/60 backdrop-blur-sm" onSubmit={handleSend}>
+        <form className="flex items-center gap-2 border-t border-blue-400/50 p-3 bg-gray-800/60 backdrop-blur-sm" onSubmit={handleSend}>
           <Input
             type="text"
             className="flex-1 h-8 text-sm bg-gray-700/50 border-gray-600/50 text-white placeholder-gray-400 focus:border-blue-500/50 backdrop-blur-sm"
