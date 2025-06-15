@@ -1,9 +1,9 @@
 
 export function getWeatherEmoji(weatherMain: string): string {
-  // Simple mapping for demonstration
+  // Show no emoji for "clouds" so that WeatherCard can use custom SVG
   switch (weatherMain.toLowerCase()) {
     case "clouds":
-      return "☁️";
+      return "";
     case "rain":
       return "🌧️";
     case "drizzle":

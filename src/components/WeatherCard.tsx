@@ -1,5 +1,4 @@
 
-
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { getWeatherEmoji } from "@/lib/weatherEmoji";
@@ -37,6 +36,31 @@ const Bubbles = () => (
   </div>
 );
 
+// Cartoonish Cloud SVG
+const CartoonCloud = () => (
+  <svg width="80" height="44" viewBox="0 0 80 44" fill="none" xmlns="http://www.w3.org/2000/svg"
+    className="drop-shadow-[0_3px_14px_rgba(70,160,255,0.35)]">
+    <ellipse cx="28" cy="32" rx="20" ry="12" fill="#A5D8FF" />
+    <ellipse cx="44" cy="22" rx="17" ry="15" fill="#74C0FC" />
+    <ellipse cx="58" cy="32" rx="18" ry="12" fill="#4dabf7" />
+    <ellipse cx="36" cy="35" rx="12" ry="10" fill="#D0EBFF" />
+    <ellipse cx="64" cy="36" rx="9" ry="7" fill="#D0EBFF" />
+    <ellipse cx="22" cy="27" rx="8" ry="7" fill="#e7f5ff" />
+    {/* Optional: little sparkle for dreamy look */}
+    <circle cx="59" cy="17" r="2" fill="#fff7fb" opacity="0.7" />
+    <circle cx="35" cy="10" r="1.6" fill="#fff7fb" opacity="0.5" />
+    {/* Add a playful outline */}
+    <path
+      d="M19 33 Q25 21 44 14 Q59 9 66 27 Q73 39 54 41 Q37 43 19 33 Z"
+      fill="none"
+      stroke="#90caf9"
+      strokeWidth="2"
+      strokeLinejoin="round"
+      opacity="0.7"
+    />
+  </svg>
+);
+
 const WeatherCard = ({ weather }: { weather: WeatherInfo | null }) => {
   if (!weather) return (
     <>
@@ -53,22 +77,31 @@ const WeatherCard = ({ weather }: { weather: WeatherInfo | null }) => {
     </>
   );
 
+  const showCartoonCloud = weather.weatherMain?.toLowerCase() === "clouds";
+
   return (
     <>
       <BackgroundBubbles />
-      <Card className="w-full max-w-sm mx-auto shadow-2xl shadow-purple-500/20 dark:shadow-sky-500/20 animate-fade-in bg-gradient-to-br from-purple-400/[.3] to-pink-500/[.3] dark:from-sky-400/[.3] dark:to-indigo-500/[.3] backdrop-blur-md border border-white/20 relative overflow-hidden font-poppins">
+      <Card className="w-full max-w-sm mx-auto shadow-2xl shadow-sky-500/20 animate-fade-in bg-gradient-to-br from-blue-900/80 to-blue-700/60 backdrop-blur-[7px] border border-white/10 relative overflow-hidden font-poppins">
         <Bubbles />
         <CardHeader className="flex flex-col items-center pb-4">
-          <span className="text-6xl text-white/90 drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]">{getWeatherEmoji(weather.weatherMain)}</span>
+          <span className="mt-2">
+            {showCartoonCloud ? (
+              <CartoonCloud />
+            ) : (
+              <span className="text-6xl text-sky-200 drop-shadow-[0_0_10px_rgba(100,200,255,0.4)]">
+                {getWeatherEmoji(weather.weatherMain)}
+              </span>
+            )}
+          </span>
           <CardTitle className="mt-2 text-2xl text-white">{weather.city}</CardTitle>
           <CardDescription className="text-sm text-white/80 mb-2 capitalize">{weather.description}</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col items-center space-y-4">
           <span className="text-5xl font-bold text-white">{Math.round(weather.temp)}°C</span>
-          
           {/* Weather Details Grid */}
           <div className="grid grid-cols-2 gap-4 w-full text-white/90">
-            {weather.feelsLike && (
+            {weather.feelsLike != null && (
               <div className="flex items-center space-x-2 bg-white/10 rounded-lg p-2">
                 <Thermometer className="w-4 h-4" />
                 <div className="text-xs">
@@ -77,8 +110,8 @@ const WeatherCard = ({ weather }: { weather: WeatherInfo | null }) => {
                 </div>
               </div>
             )}
-            
-            {weather.humidity && (
+
+            {weather.humidity != null && (
               <div className="flex items-center space-x-2 bg-white/10 rounded-lg p-2">
                 <Droplets className="w-4 h-4" />
                 <div className="text-xs">
@@ -87,8 +120,8 @@ const WeatherCard = ({ weather }: { weather: WeatherInfo | null }) => {
                 </div>
               </div>
             )}
-            
-            {weather.windSpeed && (
+
+            {weather.windSpeed != null && (
               <div className="flex items-center space-x-2 bg-white/10 rounded-lg p-2">
                 <Wind className="w-4 h-4" />
                 <div className="text-xs">
@@ -97,8 +130,8 @@ const WeatherCard = ({ weather }: { weather: WeatherInfo | null }) => {
                 </div>
               </div>
             )}
-            
-            {weather.visibility && (
+
+            {weather.visibility != null && (
               <div className="flex items-center space-x-2 bg-white/10 rounded-lg p-2">
                 <Eye className="w-4 h-4" />
                 <div className="text-xs">
@@ -115,4 +148,3 @@ const WeatherCard = ({ weather }: { weather: WeatherInfo | null }) => {
 };
 
 export default WeatherCard;
-

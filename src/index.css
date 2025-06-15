@@ -3,6 +3,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Always apply dark mode */
+html, body {
+  @apply dark;
+}
+
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. */
 
 @layer base {

@@ -1,10 +1,9 @@
 
-
 import React, { useEffect, useState } from "react";
 import WeatherCard from "@/components/WeatherCard";
 import ChatButton from "@/components/ChatButton";
 import ChatbotModal from "@/components/ChatbotModal";
-import { ThemeToggle } from "@/components/ThemeToggle";
+// Removed: import { ThemeToggle } from "@/components/ThemeToggle";
 
 type WeatherInfo = {
   city: string;
@@ -72,10 +71,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-transparent flex flex-col justify-center items-center px-2 md:px-0 relative font-poppins">
-      <div className="absolute top-4 right-4">
-        <ThemeToggle />
-      </div>
-
+      {/* Removed ThemeToggle */}
       <div className="w-full max-w-xs md:max-w-md flex flex-col gap-6 mt-14 md:mt-32 animate-fade-in">
         <WeatherCard weather={weather} />
         {error && <p className="text-center text-sm text-destructive mt-2">{error}</p>}
@@ -94,4 +90,3 @@ const Index = () => {
 };
 
 export default Index;
-
