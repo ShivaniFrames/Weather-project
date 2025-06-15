@@ -1,4 +1,5 @@
 
+
 import React, { useEffect, useState } from "react";
 import WeatherCard from "@/components/WeatherCard";
 import ChatButton from "@/components/ChatButton";
@@ -10,6 +11,10 @@ type WeatherInfo = {
   temp: number;
   description: string;
   weatherMain: string;
+  humidity?: number;
+  windSpeed?: number;
+  visibility?: number;
+  feelsLike?: number;
 };
 
 const Index = () => {
@@ -29,6 +34,10 @@ const Index = () => {
         temp: data.main.temp,
         description: data.weather?.[0]?.description ?? "",
         weatherMain: data.weather?.[0]?.main ?? "",
+        humidity: data.main.humidity,
+        windSpeed: data.wind?.speed,
+        visibility: data.visibility,
+        feelsLike: data.main.feels_like,
       });
       if (!url.includes('q=')) { // Clear error only if it's not a fallback search
         setError(null);
@@ -62,7 +71,7 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-transparent flex flex-col justify-center items-center px-2 md:px-0 relative">
+    <div className="min-h-screen bg-transparent flex flex-col justify-center items-center px-2 md:px-0 relative font-poppins">
       <div className="absolute top-4 right-4">
         <ThemeToggle />
       </div>
@@ -85,3 +94,4 @@ const Index = () => {
 };
 
 export default Index;
+

@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -98,7 +99,7 @@
   }
 
   body {
-    @apply text-foreground bg-transparent; /* Make body transparent to see gradient */
+    @apply text-foreground bg-transparent font-poppins; /* Make body transparent to see gradient and add Poppins font */
     @apply transition-colors duration-500;
   }
 
