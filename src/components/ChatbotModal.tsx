@@ -89,32 +89,15 @@ const ChatbotModal = ({
     [apiKey]
   );
 
-  // Helper for typing dots animation
+  // Enhanced typing indicator with modern animation
   const TypingIndicator = () => (
-    <div className="flex items-center space-x-2 my-2 select-none">
-      <span className="text-blue-300 font-medium text-xs lowercase">typing</span>
-      <span className="flex items-center space-x-1">
-        <span className="dot bg-blue-300 inline-block w-1.5 h-1.5 rounded-full animate-bounce delay-0" />
-        <span className="dot bg-blue-300 inline-block w-1.5 h-1.5 rounded-full animate-bounce delay-150" />
-        <span className="dot bg-blue-300 inline-block w-1.5 h-1.5 rounded-full animate-bounce delay-300" />
-      </span>
-      <style>
-        {`
-        .dot {
-          animation-name: bounceDot;
-          animation-duration: 1s;
-          animation-iteration-count: infinite;
-        }
-        .dot.delay-0 { animation-delay: 0s; }
-        .dot.delay-150 { animation-delay: 0.15s; }
-        .dot.delay-300 { animation-delay: 0.3s; }
-        @keyframes bounceDot {
-          0%, 100% { transform: translateY(0); opacity: 1; }
-          30% { transform: translateY(-2px); }
-          60% { opacity: 0.6; }
-        }
-        `}
-      </style>
+    <div className="flex items-center space-x-3 my-3 px-4 py-2 animate-fade-in">
+      <div className="flex items-center space-x-1">
+        <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce [animation-delay:-0.3s]" />
+        <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce [animation-delay:-0.15s]" />
+        <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" />
+      </div>
+      <span className="text-blue-300 text-sm font-medium">typing</span>
     </div>
   );
 
@@ -135,35 +118,57 @@ const ChatbotModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-sm w-[90vw] max-h-[70vh] p-0 overflow-hidden bg-blue-900/80 backdrop-blur-xl border border-blue-400/30 shadow-2xl">
-        <DialogHeader className="bg-gradient-to-r from-blue-800/90 to-blue-900/90 backdrop-blur-sm px-4 py-3 border-b border-blue-400/30">
-          <DialogTitle className="flex justify-between items-center text-white text-sm">
-            🤖 WeatherBot
+      <DialogContent className="fixed bottom-6 right-6 w-80 max-w-[90vw] h-96 p-0 overflow-hidden bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl rounded-2xl transform translate-x-0 translate-y-0 animate-slide-in-up">
+        {/* Modern glassmorphism header */}
+        <DialogHeader className="bg-gradient-to-r from-white/15 to-white/10 backdrop-blur-sm px-4 py-3 border-b border-white/20">
+          <DialogTitle className="flex justify-between items-center text-gray-800 text-sm font-semibold">
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+              <span>WeatherBot</span>
+            </div>
             <Button 
               variant="ghost" 
               size="sm" 
               onClick={() => setShowKeyInput((s) => !s)}
-              className="text-gray-300 hover:bg-gray-700/50 hover:text-white text-xs h-6 px-2 transition-all"
+              className="text-gray-600 hover:bg-white/20 hover:text-gray-800 text-xs h-6 px-2 transition-all rounded-lg"
             >
               {showKeyInput ? "Hide Key" : "API Key"}
             </Button>
           </DialogTitle>
-          <DialogDescription className="text-gray-400 text-xs">
+          <DialogDescription className="text-gray-600 text-xs">
             Your AI weather companion! 🌦️
           </DialogDescription>
         </DialogHeader>
 
-        <div className="h-[250px] overflow-y-auto px-3 pt-3 bg-gradient-to-b from-blue-950/60 to-blue-900/50 backdrop-blur-sm">
+        {/* Chat messages area with glassmorphism */}
+        <div className="flex-1 overflow-y-auto px-4 pt-4 bg-gradient-to-b from-white/5 to-white/10 backdrop-blur-sm">
           {messages.map((msg, idx) => (
-            <ChatMessage key={idx} msg={msg} />
+            <div
+              key={idx}
+              className={`flex mb-3 animate-fade-in ${
+                msg.from === "user" ? "justify-end" : "justify-start"
+              }`}
+              style={{ animationDelay: `${idx * 0.1}s` }}
+            >
+              <div
+                className={`rounded-2xl px-4 py-2 max-w-[80%] shadow-sm transition-all hover:shadow-md backdrop-blur-sm ${
+                  msg.from === "user"
+                    ? "bg-blue-500/90 text-white shadow-blue-500/20 hover:bg-blue-600/90"
+                    : "bg-white/80 border border-white/30 text-gray-800 hover:bg-white/90"
+                }`}
+              >
+                <span className="text-sm">{msg.text}</span>
+              </div>
+            </div>
           ))}
           {aiTyping && <TypingIndicator />}
           <div ref={bottomRef} />
         </div>
 
+        {/* API Key input with glassmorphism */}
         {showKeyInput && (
-          <div className="p-3 bg-gray-800/60 backdrop-blur-sm rounded-lg flex flex-col gap-2 mx-3 mb-2 border border-gray-700/30">
-            <label className="text-xs font-medium text-gray-300">
+          <div className="p-3 bg-white/10 backdrop-blur-sm rounded-lg flex flex-col gap-2 mx-3 mb-2 border border-white/20 animate-fade-in">
+            <label className="text-xs font-medium text-gray-700">
               Gemini API Key
             </label>
             <Input
@@ -171,16 +176,17 @@ const ChatbotModal = ({
               placeholder="Paste API Key..."
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
-              className="text-xs h-8 bg-gray-700/50 border-gray-600/50 text-white placeholder-gray-400 focus:border-blue-500/50 backdrop-blur-sm"
+              className="text-xs h-8 bg-white/50 border-white/30 text-gray-800 placeholder-gray-500 focus:border-blue-500/50 backdrop-blur-sm rounded-lg"
             />
-            <span className="text-xs text-gray-400">Stored locally only</span>
+            <span className="text-xs text-gray-600">Stored locally only</span>
           </div>
         )}
 
-        <form className="flex items-center gap-2 border-t border-blue-400/50 p-3 bg-gray-800/60 backdrop-blur-sm" onSubmit={handleSend}>
+        {/* Enhanced input area with hover effects */}
+        <form className="flex items-center gap-3 border-t border-white/20 p-4 bg-white/10 backdrop-blur-sm" onSubmit={handleSend}>
           <Input
             type="text"
-            className="flex-1 h-8 text-sm bg-gray-700/50 border-gray-600/50 text-white placeholder-gray-400 focus:border-blue-500/50 backdrop-blur-sm"
+            className="flex-1 h-10 text-sm bg-white/50 border-white/30 text-gray-800 placeholder-gray-500 focus:border-blue-400 focus:shadow-[0_0_12px_rgba(59,130,246,0.5)] backdrop-blur-sm rounded-xl transition-all duration-300 hover:border-blue-300 hover:shadow-[0_0_8px_rgba(59,130,246,0.3)]"
             placeholder="Type your message..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -190,7 +196,7 @@ const ChatbotModal = ({
           <Button 
             type="submit" 
             disabled={aiTyping || !input.trim()}
-            className="bg-blue-600 hover:bg-blue-700 h-8 px-3 text-xs transition-all hover:shadow-blue-500/25 backdrop-blur-sm"
+            className="bg-blue-500/90 hover:bg-blue-600/90 h-10 px-4 text-sm transition-all hover:shadow-lg backdrop-blur-sm rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Send
           </Button>
