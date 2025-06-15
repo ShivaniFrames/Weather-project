@@ -98,6 +98,22 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground bg-transparent; /* Make body transparent to see gradient */
+    @apply transition-colors duration-500;
+  }
+
+  /* Add gradient background */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: hsl(var(--background));
+    background-image: radial-gradient(circle at 10% 20%, hsl(var(--primary)/0.1), transparent 30%),
+                      radial-gradient(circle at 80% 90%, hsl(var(--secondary)/0.1), transparent 40%);
+    z-index: -1;
+    transition: background-color 0.5s ease-in-out, background-image 0.5s ease-in-out;
   }
 }

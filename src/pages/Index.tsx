@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import WeatherCard from "@/components/WeatherCard";
 import ChatButton from "@/components/ChatButton";
 import ChatbotModal from "@/components/ChatbotModal";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 type WeatherInfo = {
   city: string;
@@ -13,49 +14,62 @@ type WeatherInfo = {
 
 const Index = () => {
   const [weather, setWeather] = useState<WeatherInfo | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [chatOpen, setChatOpen] = useState(false);
 
-  useEffect(() => {
-    // Try geolocation and fetch weather via open-meteo
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          const lat = position.coords.latitude;
-          const lon = position.coords.longitude;
+  const fetchWeather = async (url: string, errorMessage: string) => {
+    try {
+      const resp = await fetch(url);
+      if (!resp.ok) {
+        throw new Error(errorMessage);
+      }
+      const data = await resp.json();
+      setWeather({
+        city: data.name,
+        temp: data.main.temp,
+        description: data.weather?.[0]?.description ?? "",
+        weatherMain: data.weather?.[0]?.main ?? "",
+      });
+      if (!url.includes('q=')) { // Clear error only if it's not a fallback search
+        setError(null);
+      }
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "An unknown error occurred.");
+      setWeather(null);
+    }
+  };
 
-          // Open-Meteo does not include weather main/description, so use OpenWeatherMap (public, demo)
-          // NOTE: For a real project, ask user for their API key.
-          const API_KEY = "9e2601be4fa003f1fc56fd69519b0bb4";
-          try {
-            const resp = await fetch(
-              `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
-            );
-            const data = await resp.json();
-            setWeather({
-              city: data.name,
-              temp: data.main.temp,
-              description: data.weather?.[0]?.description ?? "",
-              weatherMain: data.weather?.[0]?.main ?? "",
-            });
-          } catch (e) {
-            setWeather(null);
-          } finally {
-            setLoading(false);
-          }
-        },
-        () => setLoading(false),
-        { enableHighAccuracy: true }
-      );
+  useEffect(() => {
+    const API_KEY = "b643407bd97e38a967ff11edd8da2343";
+
+    const handleGeolocationSuccess = (position: GeolocationPosition) => {
+      const { latitude: lat, longitude: lon } = position.coords;
+      const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
+      fetchWeather(url, "Could not fetch weather data.");
+    };
+
+    const handleGeolocationError = () => {
+      setError("Location access denied. Showing weather for London.");
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=London&appid=${API_KEY}&units=metric`;
+      fetchWeather(url, "Could not fetch weather for London.");
+    };
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(handleGeolocationSuccess, handleGeolocationError);
     } else {
-      setLoading(false);
+      handleGeolocationError();
     }
   }, []);
 
   return (
-    <div className="min-h-screen bg-background flex flex-col justify-center items-center px-2 md:px-0">
-      <div className="w-full max-w-xs md:max-w-md flex flex-col gap-6 mt-14 md:mt-32">
+    <div className="min-h-screen bg-transparent flex flex-col justify-center items-center px-2 md:px-0 relative">
+      <div className="absolute top-4 right-4">
+        <ThemeToggle />
+      </div>
+
+      <div className="w-full max-w-xs md:max-w-md flex flex-col gap-6 mt-14 md:mt-32 animate-fade-in">
         <WeatherCard weather={weather} />
+        {error && <p className="text-center text-sm text-destructive mt-2">{error}</p>}
       </div>
       <ChatButton onClick={() => setChatOpen(true)} />
       <ChatbotModal
@@ -64,7 +78,7 @@ const Index = () => {
         weatherTemp={weather ? weather.temp : null}
       />
       <footer className="absolute bottom-2 left-0 w-full text-center text-xs text-muted-foreground opacity-80">
-        Powered by OpenWeather, Gemini &nbsp;| &nbsp;Responsive · {new Date().getFullYear()}
+        Powered by OpenWeather, Gemini &nbsp;|&nbsp; Responsive · {new Date().getFullYear()}
       </footer>
     </div>
   );
