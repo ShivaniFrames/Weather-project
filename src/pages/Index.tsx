@@ -1,9 +1,8 @@
-
 import React, { useEffect, useState } from "react";
 import WeatherCard from "@/components/WeatherCard";
 import ChatButton from "@/components/ChatButton";
 import ChatbotModal from "@/components/ChatbotModal";
-// Removed: import { ThemeToggle } from "@/components/ThemeToggle";
+import CloudBackground from "@/components/CloudBackground";
 
 type WeatherInfo = {
   city: string;
@@ -71,6 +70,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-transparent flex flex-col justify-center items-center px-2 md:px-0 relative font-poppins">
+      <CloudBackground />
       {/* Removed ThemeToggle */}
       <div className="w-full max-w-xs md:max-w-md flex flex-col gap-6 mt-14 md:mt-32 animate-fade-in mb-16">
         {/* Added mb-16 for more space above footer */}
