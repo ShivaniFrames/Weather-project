@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { getWeatherEmoji } from "@/lib/weatherEmoji";
@@ -61,6 +60,28 @@ const CartoonCloud = () => (
   </svg>
 );
 
+// Weather-based advice helper
+function getWeatherAdvice(weatherMain: string): string {
+  switch (weatherMain.toLowerCase()) {
+    case "rain":
+    case "drizzle":
+      return "Don't forget to take an umbrella!";
+    case "clear":
+      return "It's sunny out—wear sunglasses and sunscreen!";
+    case "clouds":
+      return "A bit cloudy—consider carrying a light jacket!";
+    case "snow":
+      return "Dress warmly, it's snowing!";
+    case "thunderstorm":
+      return "Stormy weather—best to stay indoors!";
+    case "mist":
+    case "fog":
+      return "It's foggy—drive carefully and stay safe!";
+    default:
+      return "Have a great day, whatever the weather!";
+  }
+}
+
 const WeatherCard = ({ weather }: { weather: WeatherInfo | null }) => {
   if (!weather) return (
     <>
@@ -78,6 +99,7 @@ const WeatherCard = ({ weather }: { weather: WeatherInfo | null }) => {
   );
 
   const showCartoonCloud = weather.weatherMain?.toLowerCase() === "clouds";
+  const advice = getWeatherAdvice(weather.weatherMain);
 
   return (
     <>
@@ -140,6 +162,10 @@ const WeatherCard = ({ weather }: { weather: WeatherInfo | null }) => {
                 </div>
               </div>
             )}
+          </div>
+          {/* Weather advice */}
+          <div className="mt-4 mb-2 text-center text-base text-blue-200 bg-white/5 rounded-lg px-4 py-2 font-medium shadow">
+            {advice}
           </div>
         </CardContent>
       </Card>
