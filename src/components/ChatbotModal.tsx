@@ -1,3 +1,4 @@
+
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Dialog,
@@ -10,7 +11,7 @@ import {
 import ChatMessage, { ChatMsg } from "./ChatMessage";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
+import { Send } from "lucide-react";
 
 // Use the provided Gemini API key unless overridden by user
 const DEFAULT_GEMINI_KEY = "AIzaSyCgrL1mBSOrjX2NjJIXBHmrAAAZrCAA0Xc";
@@ -92,11 +93,11 @@ const ChatbotModal = ({
   // Helper for typing dots animation
   const TypingIndicator = () => (
     <div className="flex items-center space-x-2 my-2 select-none">
-      <span className="text-blue-300 font-medium text-xs lowercase">typing</span>
+      <span className="text-gray-500 font-medium text-xs">Typing...</span>
       <span className="flex items-center space-x-1">
-        <span className="dot bg-blue-300 inline-block w-1.5 h-1.5 rounded-full animate-bounce delay-0" />
-        <span className="dot bg-blue-300 inline-block w-1.5 h-1.5 rounded-full animate-bounce delay-150" />
-        <span className="dot bg-blue-300 inline-block w-1.5 h-1.5 rounded-full animate-bounce delay-300" />
+        <span className="dot bg-blue-500 inline-block w-1.5 h-1.5 rounded-full animate-bounce delay-0" />
+        <span className="dot bg-blue-500 inline-block w-1.5 h-1.5 rounded-full animate-bounce delay-150" />
+        <span className="dot bg-blue-500 inline-block w-1.5 h-1.5 rounded-full animate-bounce delay-300" />
       </span>
       <style>
         {`
@@ -135,25 +136,25 @@ const ChatbotModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-sm w-[90vw] max-h-[70vh] p-0 overflow-hidden bg-blue-900/80 backdrop-blur-xl border border-blue-400/30 shadow-2xl">
-        <DialogHeader className="bg-gradient-to-r from-blue-800/90 to-blue-900/90 backdrop-blur-sm px-4 py-3 border-b border-blue-400/30">
-          <DialogTitle className="flex justify-between items-center text-white text-sm">
-            🤖 WeatherBot
+      <DialogContent className="sm:max-w-md w-[95vw] max-w-[400px] max-h-[600px] p-0 overflow-hidden bg-white border border-gray-200 shadow-xl rounded-2xl">
+        <DialogHeader className="bg-white px-6 py-4 border-b border-gray-100">
+          <DialogTitle className="flex justify-between items-center text-gray-800 text-lg font-semibold">
+            Chat Assistant
             <Button 
               variant="ghost" 
               size="sm" 
               onClick={() => setShowKeyInput((s) => !s)}
-              className="text-gray-300 hover:bg-gray-700/50 hover:text-white text-xs h-6 px-2 transition-all"
+              className="text-gray-500 hover:bg-gray-100 hover:text-gray-700 text-xs h-8 px-3 transition-all"
             >
               {showKeyInput ? "Hide Key" : "API Key"}
             </Button>
           </DialogTitle>
-          <DialogDescription className="text-gray-400 text-xs">
+          <DialogDescription className="text-gray-500 text-sm">
             Your AI weather companion! 🌦️
           </DialogDescription>
         </DialogHeader>
 
-        <div className="h-[250px] overflow-y-auto px-3 pt-3 bg-gradient-to-b from-blue-950/60 to-blue-900/50 backdrop-blur-sm">
+        <div className="h-[400px] overflow-y-auto px-4 pt-4 bg-gray-50">
           {messages.map((msg, idx) => (
             <ChatMessage key={idx} msg={msg} />
           ))}
@@ -162,8 +163,8 @@ const ChatbotModal = ({
         </div>
 
         {showKeyInput && (
-          <div className="p-3 bg-gray-800/60 backdrop-blur-sm rounded-lg flex flex-col gap-2 mx-3 mb-2 border border-gray-700/30">
-            <label className="text-xs font-medium text-gray-300">
+          <div className="p-4 bg-gray-50 border-t border-gray-100 flex flex-col gap-2">
+            <label className="text-xs font-medium text-gray-600">
               Gemini API Key
             </label>
             <Input
@@ -171,17 +172,17 @@ const ChatbotModal = ({
               placeholder="Paste API Key..."
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
-              className="text-xs h-8 bg-gray-700/50 border-gray-600/50 text-white placeholder-gray-400 focus:border-blue-500/50 backdrop-blur-sm"
+              className="text-xs h-8 bg-white border-gray-300 text-gray-800 placeholder-gray-400 focus:border-blue-500"
             />
-            <span className="text-xs text-gray-400">Stored locally only</span>
+            <span className="text-xs text-gray-500">Stored locally only</span>
           </div>
         )}
 
-        <form className="flex items-center gap-2 border-t border-blue-400/50 p-3 bg-gray-800/60 backdrop-blur-sm" onSubmit={handleSend}>
+        <form className="flex items-center gap-3 border-t border-gray-100 p-4 bg-white" onSubmit={handleSend}>
           <Input
             type="text"
-            className="flex-1 h-8 text-sm bg-gray-700/50 border-gray-600/50 text-white placeholder-gray-400 focus:border-blue-500/50 backdrop-blur-sm"
-            placeholder="Type your message..."
+            className="flex-1 h-10 text-sm bg-gray-50 border-gray-300 text-gray-800 placeholder-gray-500 focus:bg-white focus:border-blue-500 rounded-full px-4 transition-all"
+            placeholder="Type a message..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
             disabled={aiTyping}
@@ -190,9 +191,9 @@ const ChatbotModal = ({
           <Button 
             type="submit" 
             disabled={aiTyping || !input.trim()}
-            className="bg-blue-600 hover:bg-blue-700 h-8 px-3 text-xs transition-all hover:shadow-blue-500/25 backdrop-blur-sm"
+            className="bg-blue-500 hover:bg-blue-600 h-10 w-10 p-0 rounded-full transition-all flex items-center justify-center"
           >
-            Send
+            <Send className="h-4 w-4 text-white" />
           </Button>
         </form>
       </DialogContent>
