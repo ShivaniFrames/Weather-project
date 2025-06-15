@@ -1,3 +1,4 @@
+
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Dialog,
@@ -10,7 +11,7 @@ import {
 import ChatMessage, { ChatMsg } from "./ChatMessage";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
+import { Loader2, Send } from "lucide-react";
 
 // Use the provided Gemini API key unless overridden by user
 const DEFAULT_GEMINI_KEY = "AIzaSyCgrL1mBSOrjX2NjJIXBHmrAAAZrCAA0Xc";
@@ -21,6 +22,24 @@ type ChatbotModalProps = {
   onOpenChange: (open: boolean) => void;
   weatherTemp: number | null;
 };
+
+// Floating clouds component for chatbot background
+const ChatbotClouds = () => (
+  <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <div className="absolute -top-10 -left-20 w-40 h-20 bg-white/10 rounded-full blur-xl animate-[float_20s_ease-in-out_infinite]" />
+    <div className="absolute top-1/4 -right-16 w-32 h-16 bg-white/8 rounded-full blur-lg animate-[float_25s_ease-in-out_infinite_reverse]" />
+    <div className="absolute bottom-1/3 -left-12 w-28 h-14 bg-white/6 rounded-full blur-lg animate-[float_30s_ease-in-out_infinite]" />
+    <div className="absolute top-3/4 right-1/4 w-24 h-12 bg-white/12 rounded-full blur-xl animate-[float_22s_ease-in-out_infinite_reverse]" />
+    <style jsx>{`
+      @keyframes float {
+        0%, 100% { transform: translateY(0px) translateX(0px); }
+        25% { transform: translateY(-10px) translateX(5px); }
+        50% { transform: translateY(-5px) translateX(-8px); }
+        75% { transform: translateY(-15px) translateX(3px); }
+      }
+    `}</style>
+  </div>
+);
 
 const ChatbotModal = ({
   open,
@@ -135,8 +154,10 @@ const ChatbotModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-sm w-[90vw] max-h-[70vh] p-0 overflow-hidden bg-blue-900/80 backdrop-blur-xl border border-blue-400/30 shadow-2xl">
-        <DialogHeader className="bg-gradient-to-r from-blue-800/90 to-blue-900/90 backdrop-blur-sm px-4 py-3 border-b border-blue-400/30">
+      <DialogContent className="sm:max-w-sm w-[90vw] max-h-[70vh] p-0 overflow-hidden bg-blue-900/80 backdrop-blur-xl border border-blue-400/30 shadow-2xl relative">
+        <ChatbotClouds />
+        
+        <DialogHeader className="bg-gradient-to-r from-blue-800/90 to-blue-900/90 backdrop-blur-sm px-4 py-3 border-b border-blue-400/30 relative z-10">
           <DialogTitle className="flex justify-between items-center text-white text-sm">
             🤖 WeatherBot
             <Button 
@@ -153,7 +174,7 @@ const ChatbotModal = ({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="h-[250px] overflow-y-auto px-3 pt-3 bg-gradient-to-b from-blue-950/60 to-blue-900/50 backdrop-blur-sm">
+        <div className="h-[250px] overflow-y-auto px-3 pt-3 bg-gradient-to-b from-blue-950/60 to-blue-900/50 backdrop-blur-sm relative z-10">
           {messages.map((msg, idx) => (
             <ChatMessage key={idx} msg={msg} />
           ))}
@@ -162,7 +183,7 @@ const ChatbotModal = ({
         </div>
 
         {showKeyInput && (
-          <div className="p-3 bg-gray-800/60 backdrop-blur-sm rounded-lg flex flex-col gap-2 mx-3 mb-2 border border-gray-700/30">
+          <div className="p-3 bg-gray-800/60 backdrop-blur-sm rounded-lg flex flex-col gap-2 mx-3 mb-2 border border-gray-700/30 relative z-10">
             <label className="text-xs font-medium text-gray-300">
               Gemini API Key
             </label>
@@ -177,7 +198,7 @@ const ChatbotModal = ({
           </div>
         )}
 
-        <form className="flex items-center gap-2 border-t border-blue-400/50 p-3 bg-gray-800/60 backdrop-blur-sm" onSubmit={handleSend}>
+        <form className="flex items-center gap-2 border-t border-blue-400/50 p-3 bg-gray-800/60 backdrop-blur-sm relative z-10" onSubmit={handleSend}>
           <Input
             type="text"
             className="flex-1 h-8 text-sm bg-gray-700/50 border-gray-600/50 text-white placeholder-gray-400 focus:border-blue-500/50 backdrop-blur-sm"
@@ -190,9 +211,10 @@ const ChatbotModal = ({
           <Button 
             type="submit" 
             disabled={aiTyping || !input.trim()}
-            className="bg-blue-600 hover:bg-blue-700 h-8 px-3 text-xs transition-all hover:shadow-blue-500/25 backdrop-blur-sm"
+            size="icon"
+            className="bg-blue-600 hover:bg-blue-700 h-8 w-8 transition-all hover:shadow-blue-500/25 backdrop-blur-sm"
           >
-            Send
+            <Send className="w-4 h-4" />
           </Button>
         </form>
       </DialogContent>
