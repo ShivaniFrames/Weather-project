@@ -92,7 +92,7 @@ const ChatbotModal = ({
 
   // Helper for typing dots animation
   const TypingIndicator = () => (
-    <div className="flex items-center space-x-2 my-2 select-none">
+    <div className="flex items-center space-x-2 my-2 select-none pl-3">
       <span className="text-gray-500 font-medium text-xs">Typing...</span>
       <span className="flex items-center space-x-1">
         <span className="dot bg-blue-500 inline-block w-1.5 h-1.5 rounded-full animate-bounce delay-0" />
@@ -136,25 +136,25 @@ const ChatbotModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md w-[95vw] max-w-[400px] max-h-[600px] p-0 overflow-hidden bg-white border border-gray-200 shadow-xl rounded-2xl">
-        <DialogHeader className="bg-white px-6 py-4 border-b border-gray-100">
-          <DialogTitle className="flex justify-between items-center text-gray-800 text-lg font-semibold">
+      <DialogContent className="sm:max-w-xs w-[90vw] max-w-[320px] max-h-[480px] p-0 overflow-hidden bg-white border border-gray-200 shadow-xl rounded-xl">
+        <DialogHeader className="bg-white px-4 py-3 border-b border-gray-100">
+          <DialogTitle className="flex justify-between items-center text-gray-800 text-base font-semibold">
             Chat Assistant
             <Button 
               variant="ghost" 
               size="sm" 
               onClick={() => setShowKeyInput((s) => !s)}
-              className="text-gray-500 hover:bg-gray-100 hover:text-gray-700 text-xs h-8 px-3 transition-all"
+              className="text-gray-500 hover:bg-gray-100 hover:text-gray-700 text-xs h-7 px-2 transition-all"
             >
-              {showKeyInput ? "Hide Key" : "API Key"}
+              {showKeyInput ? "Hide" : "Key"}
             </Button>
           </DialogTitle>
-          <DialogDescription className="text-gray-500 text-sm">
+          <DialogDescription className="text-gray-500 text-xs">
             Your AI weather companion! 🌦️
           </DialogDescription>
         </DialogHeader>
 
-        <div className="h-[400px] overflow-y-auto px-4 pt-4 bg-gray-50">
+        <div className="h-[300px] overflow-y-auto px-3 py-2 bg-gray-50 space-y-2">
           {messages.map((msg, idx) => (
             <ChatMessage key={idx} msg={msg} />
           ))}
@@ -163,7 +163,7 @@ const ChatbotModal = ({
         </div>
 
         {showKeyInput && (
-          <div className="p-4 bg-gray-50 border-t border-gray-100 flex flex-col gap-2">
+          <div className="p-3 bg-gray-50 border-t border-gray-100 space-y-2">
             <label className="text-xs font-medium text-gray-600">
               Gemini API Key
             </label>
@@ -172,16 +172,16 @@ const ChatbotModal = ({
               placeholder="Paste API Key..."
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
-              className="text-xs h-8 bg-white border-gray-300 text-gray-800 placeholder-gray-400 focus:border-blue-500"
+              className="text-xs h-7 bg-white border-gray-300 text-gray-800 placeholder-gray-400 focus:border-blue-500"
             />
             <span className="text-xs text-gray-500">Stored locally only</span>
           </div>
         )}
 
-        <form className="flex items-center gap-3 border-t border-gray-100 p-4 bg-white" onSubmit={handleSend}>
+        <form className="flex items-center gap-2 border-t border-gray-100 p-3 bg-white" onSubmit={handleSend}>
           <Input
             type="text"
-            className="flex-1 h-10 text-sm bg-gray-50 border-gray-300 text-gray-800 placeholder-gray-500 focus:bg-white focus:border-blue-500 rounded-full px-4 transition-all"
+            className="flex-1 h-8 text-sm bg-gray-50 border-gray-300 text-gray-800 placeholder-gray-500 focus:bg-white focus:border-blue-500 rounded-full px-3 transition-all"
             placeholder="Type a message..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -191,9 +191,9 @@ const ChatbotModal = ({
           <Button 
             type="submit" 
             disabled={aiTyping || !input.trim()}
-            className="bg-blue-500 hover:bg-blue-600 h-10 w-10 p-0 rounded-full transition-all flex items-center justify-center"
+            className="bg-blue-500 hover:bg-blue-600 h-8 w-8 p-0 rounded-full transition-all flex items-center justify-center"
           >
-            <Send className="h-4 w-4 text-white" />
+            <Send className="h-3.5 w-3.5 text-white" />
           </Button>
         </form>
       </DialogContent>

@@ -7,12 +7,12 @@ export type ChatMsg = {
 };
 
 const ChatMessage = ({ msg }: { msg: ChatMsg }) => (
-  <div className={`flex ${msg.from === "user" ? "justify-end" : "justify-start"} mb-3 animate-fade-in`}>
+  <div className={`flex ${msg.from === "user" ? "justify-end" : "justify-start"} mb-2`}>
     <div
-      className={`rounded-2xl px-4 py-3 max-w-[80%] shadow-sm text-sm transition-all
+      className={`rounded-lg px-3 py-2 max-w-[85%] text-sm transition-all shadow-sm
       ${msg.from === "user" 
-        ? "bg-blue-500 text-white rounded-br-md" 
-        : "bg-white border border-gray-200 text-gray-800 rounded-bl-md"
+        ? "bg-blue-500 text-white rounded-br-sm" 
+        : "bg-white border border-gray-200 text-gray-800 rounded-bl-sm"
       }`}
     >
       {msg.text}
